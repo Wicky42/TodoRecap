@@ -32,15 +32,16 @@ public class TodoService {
 
     // Add Function
     public Todo addTodo(TodoDTO content) {
+        if(content.description() == null || content.description().isBlank()  ){
+            throw new IllegalArgumentException("Description must not be empty");
+        }
         Todo newTodo = new Todo(idService.generateTodoId(), content.description(), content.status());
         return todoRepository.save(newTodo);
     }
 
 
     public Todo update(TodoDTO updateTodo, String id) {
-        //find todo in repo by id
         Optional<Todo> todo = todoRepository.findById(id);
-        //
         if(todo.isEmpty()) {
             throw new TodoNotFoundException();
         }

@@ -1,5 +1,6 @@
 package org.example.todorecapproject.service;
 
+import org.example.todorecapproject.TodoDTO;
 import org.example.todorecapproject.domain.Status;
 import org.example.todorecapproject.domain.Todo;
 import org.example.todorecapproject.repository.TodoRepository;
@@ -57,7 +58,40 @@ class TodoServiceTest {
         assertEquals("TODO 1", response.get().description());
         assertEquals(Status.OPEN, response.get().status());
         verify(mockRepo).findById("1");
-
     }
+
+    @Test
+    void getTodoById_shouldReturnEmptyOptional_whenGivenNonExisting(){
+        when(mockRepo.findById("99")).thenReturn(Optional.empty());
+
+        Optional<Todo> result = service.getTodoById("99");
+        assertTrue(result.isEmpty());
+        verify(mockRepo).findById("99");
+    }
+
+    @Test
+    void addTodo_shouldAddTodoToRepository() {
+        TodoDTO input = new TodoDTO("Description", Status.OPEN);
+
+        when(idService.generateTodoId()).thenReturn("1");
+        when(mockRepo.save(any(Todo.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        Todo result = service.addTodo(input);
+
+        verify(idService).generateTodoId();
+        verify(mockRepo).save(any(Todo.class));
+        assertEquals("1", result.id());
+        assertEquals("Description", result.description());
+        assertEquals(Status.OPEN, result.status());
+    }
+
+    @Test
+    void addTodo_shouldThrowIllegalArgumentException_whenCalledWithEmptyDescription(){
+        TodoDTO input = new TodoDTO("", Status.OPEN);
+        assertThrows(IllegalArgumentException.class, ()-> service.addTodo(input));
+        verify(mockRepo, never()).save(any());
+    }
+
 
 }
