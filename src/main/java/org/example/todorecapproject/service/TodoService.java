@@ -20,12 +20,6 @@ public class TodoService {
         this.idService = idService;
     }
 
-    // HELPER
-    // Map To DTO
-    private TodoDTO mapToDto(Todo todo){
-        return new TodoDTO(todo.description(), todo.status());
-    }
-
     // Get Functions
     public List<Todo> getAllTodos() {
         return todoRepository.findAll();
@@ -51,5 +45,9 @@ public class TodoService {
             throw new TodoNotFoundException();
         }
         return todoRepository.save(new Todo(id, updateTodo.description(), updateTodo.status()));
+    }
+
+    public void delete(String id) {
+        todoRepository.deleteById(id);
     }
 }
