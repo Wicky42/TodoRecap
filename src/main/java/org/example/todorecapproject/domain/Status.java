@@ -2,6 +2,6 @@ package org.example.todorecapproject.domain;
 
 public enum Status {
     OPEN,
-    DOING,
+    IN_PROGRESS,
     DONE
 }

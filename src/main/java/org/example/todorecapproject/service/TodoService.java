@@ -2,6 +2,7 @@ package org.example.todorecapproject.service;
 
 import org.example.todorecapproject.TodoDTO;
 import org.example.todorecapproject.domain.Todo;
+import org.example.todorecapproject.domain.exceptions.TodoNotFoundException;
 import org.example.todorecapproject.repository.TodoRepository;
 import org.springframework.stereotype.Service;
 
@@ -42,4 +43,13 @@ public class TodoService {
     }
 
 
+    public Todo update(TodoDTO updateTodo, String id) {
+        //find todo in repo by id
+        Optional<Todo> todo = todoRepository.findById(id);
+        //
+        if(todo.isEmpty()) {
+            throw new TodoNotFoundException();
+        }
+        return todoRepository.save(new Todo(id, updateTodo.description(), updateTodo.status()));
+    }
 }

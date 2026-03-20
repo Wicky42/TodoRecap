@@ -37,4 +37,10 @@ public class TodoController {
     public ResponseEntity<Todo> addTodo(@RequestBody TodoDTO todo){
         return ResponseEntity.ok(service.addTodo(todo));
     }
+
+    // ------------------- PUT MAPPING -------------------//
+    @PutMapping("/{id}")
+    public ResponseEntity<Todo> updateTodo(@RequestBody TodoDTO updateTodo, @PathVariable String id){
+        return ResponseEntity.ok(service.update(updateTodo, id));
+    }
 }
