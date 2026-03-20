@@ -3,9 +3,7 @@ package org.example.todorecapproject.controller;
 import org.example.todorecapproject.domain.Todo;
 import org.example.todorecapproject.service.TodoService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +21,12 @@ public class TodoController {
     @GetMapping
     public ResponseEntity<List<Todo>> getTodos(){
         return ResponseEntity.ok(service.getAllTodos());
+    }
+
+
+    //------------------- POST MAPPING ------------------//
+    @PostMapping
+    public ResponseEntity<Todo> addTodo(@RequestBody Todo todo){
+        return ResponseEntity.ok(service.addTodo(todo));
     }
 }
