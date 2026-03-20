@@ -45,6 +45,9 @@ public class TodoService {
         if(todo.isEmpty()) {
             throw new TodoNotFoundException();
         }
+        if(updateTodo.description() == null || updateTodo.description().isBlank()){
+            throw new IllegalArgumentException("Description must not be empty");
+        }
         return todoRepository.save(new Todo(id, updateTodo.description(), updateTodo.status()));
     }
 

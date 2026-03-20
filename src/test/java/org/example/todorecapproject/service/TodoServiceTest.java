@@ -3,6 +3,7 @@ package org.example.todorecapproject.service;
 import org.example.todorecapproject.TodoDTO;
 import org.example.todorecapproject.domain.Status;
 import org.example.todorecapproject.domain.Todo;
+import org.example.todorecapproject.domain.exceptions.TodoNotFoundException;
 import org.example.todorecapproject.repository.TodoRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -91,6 +92,42 @@ class TodoServiceTest {
         TodoDTO input = new TodoDTO("", Status.OPEN);
         assertThrows(IllegalArgumentException.class, ()-> service.addTodo(input));
         verify(mockRepo, never()).save(any());
+    }
+
+    @Test
+    void update_shouldUpdateTodo_whenCalledWithValidValues(){
+        when(mockRepo.findById("1")).thenReturn(Optional.of(VALID_TODO_LIST.getFirst()));
+        when(mockRepo.save(any(Todo.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+        TodoDTO input = new TodoDTO("NEW TODO", Status.IN_PROGRESS);
+
+        Todo updated = service.update(input, "1");
+        verify(mockRepo).findById("1");
+        verify(mockRepo).save(any(Todo.class));
+        assertEquals("NEW TODO", updated.description());
+        assertEquals(Status.IN_PROGRESS, updated.status());
+    }
+
+    @Test
+    void update_shouldThrowToDoNotFoundException_whenCalledWithInvalidId(){
+        when(mockRepo.findById("99")).thenReturn(Optional.empty());
+        assertThrows(TodoNotFoundException.class,
+                ()->service.update(new TodoDTO("test", Status.OPEN), "99"));
+    }
+
+    @Test
+    void update_shouldThrowIllegalArgumentException_whenCalledWithInvalidDescription(){
+        when(mockRepo.findById("1")).thenReturn(Optional.of(VALID_TODO_LIST.getFirst()));
+        assertThrows(IllegalArgumentException.class,
+                ()->service.update(new TodoDTO("", Status.OPEN), "1"));
+    }
+
+    @Test
+    void update_shouldThrowIllegalArgumentException_whenCalledWithNullDescription(){
+        when(mockRepo.findById("1")).thenReturn(Optional.of(VALID_TODO_LIST.getFirst()));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> service.update(new TodoDTO(null, Status.OPEN), "1"));
     }
 
 
