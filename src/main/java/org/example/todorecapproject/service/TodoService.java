@@ -43,7 +43,7 @@ public class TodoService {
     public Todo update(TodoDTO updateTodo, String id) {
         Optional<Todo> todo = todoRepository.findById(id);
         if(todo.isEmpty()) {
-            throw new TodoNotFoundException();
+            throw new TodoNotFoundException("ToDo with ID: " + id + " not found");
         }
         if(updateTodo.description() == null || updateTodo.description().isBlank()){
             throw new IllegalArgumentException("Description must not be empty");
@@ -52,6 +52,9 @@ public class TodoService {
     }
 
     public void delete(String id) {
+        if(!todoRepository.existsById(id)){
+            throw new TodoNotFoundException("ToDo with ID: " + id + " not found");
+        }
         todoRepository.deleteById(id);
     }
 }

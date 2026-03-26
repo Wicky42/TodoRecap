@@ -41,8 +41,8 @@ public class TodoController {
 
     // ------------------- PUT MAPPING -------------------//
     @PutMapping("/{id}")
-    public ResponseEntity<Todo> updateTodo(@RequestBody TodoDTO updateTodo, @PathVariable String id){
-        return ResponseEntity.ok(service.update(updateTodo, id));
+    public Todo updateTodo(@RequestBody TodoDTO updateTodo, @PathVariable String id){
+        return service.update(updateTodo, id);
     }
 
     // ------------------- DELETE MAPPING ---------------- //

@@ -70,6 +70,8 @@ class TodoServiceTest {
         verify(mockRepo).findById("99");
     }
 
+    // -------------- ADD
+
     @Test
     void addTodo_shouldAddTodoToRepository() {
         TodoDTO input = new TodoDTO("Description", Status.OPEN);
@@ -94,6 +96,8 @@ class TodoServiceTest {
         verify(mockRepo, never()).save(any());
     }
 
+    // -------------- UPDATE
+
     @Test
     void update_shouldUpdateTodo_whenCalledWithValidValues(){
         when(mockRepo.findById("1")).thenReturn(Optional.of(VALID_TODO_LIST.getFirst()));
@@ -113,6 +117,7 @@ class TodoServiceTest {
         when(mockRepo.findById("99")).thenReturn(Optional.empty());
         assertThrows(TodoNotFoundException.class,
                 ()->service.update(new TodoDTO("test", Status.OPEN), "99"));
+
     }
 
     @Test
@@ -130,5 +135,20 @@ class TodoServiceTest {
                 () -> service.update(new TodoDTO(null, Status.OPEN), "1"));
     }
 
+    // ----------- DELETE
+
+    @Test
+    void delete_shouldCallRepositoryDeleteById() {
+        when(mockRepo.existsById("1")).thenReturn(true);
+        service.delete("1");
+        verify(mockRepo).deleteById("1");
+    }
+
+    @Test
+    void delete_shouldThrowException_whenTodoDoesNotExist() {
+        when(mockRepo.existsById("1")).thenReturn(false);
+        assertThrows(TodoNotFoundException.class, () -> service.delete("1"));
+        verify(mockRepo, never()).deleteById(any());
+    }
 
 }
