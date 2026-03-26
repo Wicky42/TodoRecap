@@ -8,7 +8,6 @@ import org.example.todorecapproject.repository.TodoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TodoService {
@@ -28,8 +27,9 @@ public class TodoService {
         return todoRepository.findAll();
     }
 
-    public Optional<Todo> getTodoById(String id) {
-        return todoRepository.findById(id);
+    public Todo getTodoById(String id) {
+        return todoRepository.findById(id)
+                .orElseThrow(()-> new TodoNotFoundException("ToDo with ID: " + id + " not found"));
     }
 
 
@@ -47,10 +47,9 @@ public class TodoService {
 
 
     public Todo update(TodoDTO updateTodo, String id) {
-        Optional<Todo> todo = todoRepository.findById(id);
-        if(todo.isEmpty()) {
-            throw new TodoNotFoundException("ToDo with ID: " + id + " not found");
-        }
+        todoRepository.findById(id)
+                .orElseThrow(() -> new TodoNotFoundException("ToDo with ID: " + id + " not found"));
+
         if(updateTodo.description() == null || updateTodo.description().isBlank()){
             throw new IllegalArgumentException("Description must not be empty");
         }

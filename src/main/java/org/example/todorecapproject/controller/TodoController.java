@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/todo")
@@ -28,8 +27,8 @@ public class TodoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Todo> getTodo(@PathVariable String id){
-        Optional<Todo> todo = service.getTodoById(id);
-        return todo.map(ResponseEntity::ok).orElseGet(()->ResponseEntity.notFound().build());
+        Todo todo = service.getTodoById(id);
+        return ResponseEntity.ok(todo);
     }
 
     //------------------- POST MAPPING ------------------//
