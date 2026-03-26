@@ -1,6 +1,7 @@
 package org.example.todorecapproject.service;
 
 import org.example.todorecapproject.TodoDTO;
+import org.example.todorecapproject.client.OpenAiClient;
 import org.example.todorecapproject.domain.Todo;
 import org.example.todorecapproject.domain.exceptions.TodoNotFoundException;
 import org.example.todorecapproject.repository.TodoRepository;
@@ -14,10 +15,12 @@ public class TodoService {
 
     private final TodoRepository todoRepository;
     private final IdService idService;
+    private final OpenAiClient openAiClient;
 
-    public TodoService(TodoRepository todoRepository, IdService idService) {
+    public TodoService(TodoRepository todoRepository, IdService idService, OpenAiClient openAiClient) {
         this.todoRepository = todoRepository;
         this.idService = idService;
+        this.openAiClient = openAiClient;
     }
 
     // Get Functions
@@ -35,7 +38,10 @@ public class TodoService {
         if(content.description() == null || content.description().isBlank()  ){
             throw new IllegalArgumentException("Description must not be empty");
         }
-        Todo newTodo = new Todo(idService.generateTodoId(), content.description(), content.status());
+        // check grammar with OpenAi
+        String correctedDescription = openAiClient.checkGrammar(content.description()).text();
+
+        Todo newTodo = new Todo(idService.generateTodoId(), correctedDescription, content.status());
         return todoRepository.save(newTodo);
     }
 
@@ -48,7 +54,10 @@ public class TodoService {
         if(updateTodo.description() == null || updateTodo.description().isBlank()){
             throw new IllegalArgumentException("Description must not be empty");
         }
-        return todoRepository.save(new Todo(id, updateTodo.description(), updateTodo.status()));
+        // check grammar with OpenAi
+        String correctedDescription = openAiClient.checkGrammar(updateTodo.description()).text();
+
+        return todoRepository.save(new Todo(id, correctedDescription, updateTodo.status()));
     }
 
     public void delete(String id) {
