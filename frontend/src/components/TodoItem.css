@@ -1,0 +1,62 @@
+.todo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 12px 16px;
+    margin-bottom: 10px;
+
+    background-color: #f5f5f5;
+    border-radius: 8px;
+
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Beschreibung */
+.todo-text {
+    font-size: 16px;
+}
+
+/* Status Farben */
+.todo-status {
+    margin-left: 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.status-OPEN {
+    color: orange;
+}
+
+.status-IN_PROGRESS {
+    color: blue;
+}
+
+.status-DONE {
+    color: green;
+    text-decoration: line-through;
+}
+
+/* Buttons */
+.todo-actions button {
+    margin-left: 8px;
+    padding: 6px 10px;
+
+    border: none;
+    border-radius: 6px;
+
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.todo-actions button:hover {
+    opacity: 0.8;
+}
+
+.edit-btn {
+    background-color: #ffd166;
+}
+
+.status-btn {
+    background-color: #06d6a0;
+}
