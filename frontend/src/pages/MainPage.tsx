@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
 import {getTodos} from "../services/todoService.ts";
 import type {Todo} from "../types/Todo.ts";
-import TodoItem from "../components/TodoItem.tsx";
 import TodoList from "../components/TodoList.tsx";
+import "./MainPage.css";
 
 export function MainPage() {
 
@@ -23,9 +23,16 @@ export function MainPage() {
             <input />
             <button>Anlegen</button>
 
-            <div id={"todoOverall"}>
-                <TodoList todos={todos}></TodoList>
-                <TodoList todos={todos}></TodoList>
+            <div id="todoOverall">
+                <div className="todo-column">
+                    <TodoList todos={todos.filter( todo => todo.status === "OPEN")} />
+                </div>
+                <div className="todo-column">
+                    <TodoList todos={todos.filter(todo => todo.status === "IN_PROGRESS")} />
+                </div>
+                <div className="todo-column">
+                    <TodoList todos={todos.filter((todo => todo.status === "DONE"))} />
+                </div>
             </div>
 
         </div>

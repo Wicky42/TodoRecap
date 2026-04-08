@@ -1,0 +1,15 @@
+#todoOverall {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+/* Jede Spalte */
+.todo-column {
+    flex: 1;
+    background-color: #eeeeee;
+    padding: 15px;
+    border-radius: 10px;
+    min-height: 300px;
+}
