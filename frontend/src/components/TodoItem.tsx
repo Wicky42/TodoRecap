@@ -3,9 +3,17 @@ import "./TodoItem.css";
 
 type Props = {
     todo: Todo;
+    onDelete: (id: string) => void;
+    onStatusChange: (todo: Todo) => void;
 };
 
-export default function TodoItem({ todo }: Props) {
+export default function TodoItem({ todo, onDelete, onStatusChange }: Props) {
+    function getNextStatus() {
+        if (todo.status === "OPEN") return "IN_PROGRESS";
+        if (todo.status === "IN_PROGRESS") return "DONE";
+        return "OPEN";
+    }
+
     return (
         <div className="todo-item">
             <div>
@@ -16,8 +24,12 @@ export default function TodoItem({ todo }: Props) {
             </div>
 
             <div className="todo-actions">
-                <button className="edit-btn">Edit</button>
-                <button className="status-btn">Status</button>
+                <button onClick={() => onStatusChange({ ...todo, status: getNextStatus() })}>
+                    Status ändern
+                </button>
+                <button onClick={() => onDelete(todo.id)}>
+                    Löschen
+                </button>
             </div>
         </div>
     );

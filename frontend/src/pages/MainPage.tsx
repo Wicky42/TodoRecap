@@ -1,18 +1,33 @@
-import {useEffect, useState} from "react";
-import {getTodos} from "../services/todoService.ts";
-import type {Todo} from "../types/Todo.ts";
-import TodoList from "../components/TodoList.tsx";
-import "./MainPage.css";
+import Overview from "../components/Overview";
+import TodoInput from "../components/TodoInput";
+import { useEffect, useState } from "react";
+import type { Todo } from "../types/Todo";
+import { deleteTodo, getTodos, updateTodo } from "../services/todoService";
 
 export function MainPage() {
-
     const [todos, setTodos] = useState<Todo[]>([]);
 
-    useEffect(()=> {
+    function loadTodos() {
         getTodos()
-            .then(res => setTodos(res.data))
-            .catch(err => console.log(err));
+            .then((res) => setTodos(res.data))
+            .catch((err) => console.log(err));
+    }
+
+    useEffect(() => {
+        loadTodos();
     }, []);
+
+    function handleDelete(id: string) {
+        deleteTodo(id)
+            .then(() => loadTodos())
+            .catch((err) => console.error(err));
+    }
+
+    function handleStatusChange(updatedTodo: Todo) {
+        updateTodo(updatedTodo)
+            .then(() => loadTodos())
+            .catch((err) => console.error(err));
+    }
 
     return (
         <div>
@@ -20,21 +35,12 @@ export function MainPage() {
             <h2>Lege Aufgaben an und verwalte sie!</h2>
             <p>Worauf wartest du noch? Was ist zu tun?</p>
 
-            <input />
-            <button>Anlegen</button>
-
-            <div id="todoOverall">
-                <div className="todo-column">
-                    <TodoList todos={todos.filter( todo => todo.status === "OPEN")} />
-                </div>
-                <div className="todo-column">
-                    <TodoList todos={todos.filter(todo => todo.status === "IN_PROGRESS")} />
-                </div>
-                <div className="todo-column">
-                    <TodoList todos={todos.filter((todo => todo.status === "DONE"))} />
-                </div>
-            </div>
-
+            <TodoInput onTodoCreated={loadTodos} />
+            <Overview
+                todos={todos}
+                onDelete={handleDelete}
+                onStatusChange={handleStatusChange}
+            />
         </div>
     );
 }
