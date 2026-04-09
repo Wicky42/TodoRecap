@@ -16,7 +16,7 @@ export default function TodoItem({ todo, onDelete, onStatusChange }: Props) {
 
     return (
         <div className="todo-item">
-            <div>
+            <div className="todo-content">
                 <span className="todo-text">{todo.description}</span>
                 <span className={`todo-status status-${todo.status}`}>
           {todo.status}
@@ -25,7 +25,7 @@ export default function TodoItem({ todo, onDelete, onStatusChange }: Props) {
 
             <div className="todo-actions">
                 <button onClick={() => onStatusChange({ ...todo, status: getNextStatus() })}>
-                    Status ändern
+                    >>
                 </button>
                 <button onClick={() => onDelete(todo.id)}>
                     Löschen

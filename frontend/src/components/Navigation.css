@@ -1,0 +1,53 @@
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 16px 32px;
+
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Titel links */
+.nav-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-text);
+    letter-spacing: -0.01em;
+}
+
+/* Links rechts */
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+/* einzelne Links */
+.nav-links a {
+    font-size: 0.95rem;
+    font-weight: 500;
+
+    color: var(--color-text-soft);
+    padding: 6px 10px;
+
+    border-radius: var(--radius-button);
+    transition: all 0.2s ease;
+}
+
+/* Hover */
+.nav-links a:hover {
+    background-color: var(--color-surface-soft);
+    color: var(--color-text);
+}
+
+/* Active Link (optional später mit NavLink) */
+.nav-links a.active {
+    background-color: var(--color-surface-soft);
+    color: var(--color-primary);
+    font-weight: 600;
+}
